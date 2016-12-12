@@ -95,9 +95,8 @@ uint16_t u2f_register(U2F_REGISTER_REQ *req, U2F_REGISTER_RESP *resp, int flags,
     /* Convert EC private key to a key handle -> encrypt it and the appId using an AES private key */
     MBEDTLS_MPI_CHK( mbedtls_aes_setkey_enc( &aes, aes_key, sizeof(aes_key)*8 ) );
 
-    assert (mbedtls_mpi_size( &ctx_new_ec.d ) == 32 );
     /* load EC private key to start of buf */
-    mbedtls_mpi_write_binary( &ctx_new_ec.d, buf, mbedtls_mpi_size( &ctx_new_ec.d ) );
+    mbedtls_mpi_write_binary( &ctx_new_ec.d, buf, 32 );
     dump_buf("private key ", buf, mbedtls_mpi_size( &ctx_new_ec.d ) );
     /* Copy appId to the buffer, after the EC private key */
     memcpy(buf + 32, req->appId, U2F_APPID_SIZE);
